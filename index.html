@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UstazMentor - 3D Cyber Architect Ойыны</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #050515 0%, #150030 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #00ffff;
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 700px;
+            width: 100%;
+            background: rgba(20, 10, 40, 0.9);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+            border: 2px solid #ff00ff;
+        }
+        h1 {
+            color: #ff00ff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 22px;
+            text-align: center;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.7);
+        }
+        .subtitle {
+            color: #00ffff;
+            font-size: 13px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .name-section {
+            background: rgba(40, 20, 80, 0.8);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #00ffff;
+            text-align: center;
+        }
+        .name-section input {
+            padding: 12px;
+            width: 70%;
+            border-radius: 8px;
+            border: 1px solid #ff00ff;
+            background: #050515;
+            color: #00ffff;
+            font-size: 16px;
+            margin-right: 10px;
+            outline: none;
+            text-align: center;
+        }
+        .btn {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            color: #050515;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.3s;
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+        }
+        .btn:hover {
+            opacity: 0.9;
+            transform: scale(1.03);
+        }
+        .game-screen {
+            display: none;
+        }
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(30, 15, 60, 0.9);
+            padding: 12px 18px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            border: 1px solid #00ffff;
+        }
+        /* Галактикалық станцияның қуат шкаласы */
+        .galaxy-core {
+            background: #050515;
+            border-radius: 12px;
+            height: 25px;
+            width: 100%;
+            position: relative;
+            margin-bottom: 15px;
+            border: 1px solid #ff00ff;
+            overflow: hidden;
+        }
+        .core-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            width: 0%;
+            transition: width 0.6s ease;
+            box-shadow: 0 0 15px #00ffff;
+        }
+        .mission-card {
+            background: rgba(30, 15, 60, 0.8);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #ff00ff;
+            margin-bottom: 15px;
+        }
+        .mission-title {
+            color: #ff00ff;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .opt-option {
+            background: rgba(10, 5, 25, 0.9);
+            color: #ffffff;
+            padding: 12px 15px;
+            border: 1px solid #00ffff;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            text-align: left;
+            transition: 0.2s;
+        }
+        .opt-option:hover {
+            background: rgba(0, 255, 255, 0.2);
+            border-color: #ff00ff;
+        }
+        .attempts-info {
+            color: #ffcc00;
+            font-size: 13px;
+            margin-bottom: 10px;
+            text-align: right;
+        }
+        .result-screen {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🌌 3D Cyber Architect</h1>
+    <div class="subtitle">7.3.2.1 — Компьютерлік модельдерді қолдану (Өмірлік кейстер)</div>
+    <hr style="border-top: 1px solid #ff00ff; margin-bottom: 20px;">
+
+    <!-- Ойыншы атын енгізу -->
+    <div class="name-section" id="nameSection">
+        <h3 style="color: #00ffff; margin-top: 0;">🚀 Бас сәулетші идентификаторы:</h3>
+        <p style="color: #b19cd9; font-size: 13px;">Галактикалық жобаға қатысу үшін аты-жөніңізді жазыңыз:</p>
+        <input type="text" id="studentName" placeholder="Мысалы: Данияр Сәулетші">
+        <button class="btn" onclick="startGame()">Станцияға қосылу ⚡</button>
+    </div>
+
+    <!-- Ойын экраны -->
+    <div class="game-screen" id="gameScreen">
+        <div class="stats-bar">
+            <span id="playerDisplay" style="color: #00ffff;">Сәулетші: ---</span>
+            <span id="levelDisplay" style="color: #ff00ff;">Миссия: 1 / 5</span>
+            <span id="scoreDisplay" style="color: #00ff00;">Энергия: 0 балл</span>
+        </div>
+
+        <!-- Галактикалық станцияның қуат шкаласы -->
+        <div class="galaxy-core">
+            <div class="core-fill" id="coreFill"></div>
+        </div>
+
+        <div class="mission-card" id="missionCard">
+            <!-- Динамикалық миссиялар осында жүктеледі -->
+        </div>
+    </div>
+
+    <!-- Қорытынды экран -->
+    <div class="result-screen" id="resultScreen">
+        <h2 style="color: #ff00ff;">🌟 Галактикалық Станция Жұмысы Аяқталды!</h2>
+        <p id="finalText" style="font-size: 18px; color: #ffffff;"></p>
+        <div id="badgeBox" style="font-size: 20px; margin: 20px 0; color: #00ffff;"></div>
+        <button class="btn" onclick="location.reload()">Жаңа жоба бастау 🔄</button>
+    </div>
+</div>
+
+<script>
+    let playerName = "";
+    let currentMission = 0;
+    let score = 0;
+    let attemptsLeft = 2; // Әр сұраққа берілген 2 попытка
+
+    // Өмірлік жағдаяттарға (функционалдық сауаттылыққа) негізделген 5 миссия
+    const missions = [
+        {
+            title: "🏠 1-кейс: Үйді жөндеу және интерьер жоспары",
+            desc: "Әйгерім отбасымен жаңа пәтерге көшті. Олар бөлмеге жаңа жиһазды (шкаф, диван) сатып алмас бұрын, олардың орналасуын, түсін және өлшемін компьютерде көлемді түрде көріп, жоспарлағысы келеді. Бұл үшін қандай бағдарлама мен модель қолданылады?",
+            options: [
+                "А) Үш өлшемді (3D) интерьер дизайн моделі",
+                "Б) Қарапайым мәтіндік редактор (Word)",
+                "В) Музыкалық дыбыс редакторы",
+                "Г) Антивирустық сканерлеу"
+            ],
+            correct: "А) Үш өлшемді (3D) интерьер дизайн моделі"
+        },
+        {
+            title: "🤖 2-кейс: Мектептің робототехника жобасы",
+            desc: "Арман мектептің робототехника үйірмесінде өз жобасына арналған шағын пластик тетікті (бөлшекті) жасағысы келеді. Оны қолмен жасау қиын, сондықтан сызбасын компьютерде көлемді түрде дайындап, 3D принтерге басып шығаруға жібермекші. Бұл қандай модель түрі?",
+            options: [
+                "А) Мәтіндік кесте",
+                "Б) Үш өлшемді (3D) инженерлік компьютерлік модель",
+                "В) Электрондық пошта хаты",
+                "Г) Статикалық монохромды сурет"
+            ],
+            correct: "Б) Үш өлшемді (3D) инженерлік компьютерлік модель"
+        },
+        {
+            title: "🌉 3-кейс: Құрылыс және қауіпсіздік инженериясы",
+            desc: "Инженерлер үлкен өзеннің үстінен салатын жаңа көпірдің жобасын жасап, оның көлік салмағына төтеп беруін және жел соққандағы беріктігін компьютерде симуляция жасап сынақтан өткізеді. Бұл модельдеу нақты өмірде не үшін қажет?",
+            options: [
+                "А) Құрылысты бастамас бұрын мүмкін болатын қателерді есептеп, қауіпсіздікті қамтамасыз ету үшін",
+                "Б) Компьютердің жадын тез толтыру үшін",
+                "В) Интернет жылдамдығын тексеру үшін",
+                "Г) Тек әдемі сурет салу үшін"
+            ],
+            correct: "А) Құрылысты бастамас бұрын мүмкін болатын қателерді есептеп, қауіпсіздікті қамтамасыз ету үшін"
+        },
+        {
+            title: "🦷 4-кейс: Медицина және виртуалды ота",
+            desc: "Ортодонт дәрігер жасөспірімнің тісін туралау үшін жақ сүйегінің компьютерлік 3D үлгісін жасап, брекеттердің тіске қалай әсер ететінін алдын ала көреді. Бұл медицинада компьютерлік модельдерді қолданудың қай бағытына жатады?",
+            options: [
+                "А) Музыка тыңдауға",
+                "Б) Виртуалды диагностика және емдеуді жоспарлауға",
+                "В) Компьютерлік ойын ойнауға",
+                "Г) Мәтін теру жылдамдығын арттыруға"
+            ],
+            correct: "Б) Виртуалды диагностика және емдеуді жоспарлауға"
+        },
+        {
+            title: "🎮 5-кейс: Компьютерлік ойындар жасау (GameDev)",
+            desc: "Мектеп оқушылары өздері жасап жатқан мобильді ойынға басты кейіпкердің 3D моделін салып, оның жүру және секіру қимылдарын бағдарламалайды. Бұл виртуалды әлемді жасауда не қолданылады?",
+            options: [
+                "А) Тек қағаздағы қарапайым сызбалар",
+                "Б) 3D көлемді модельдер және қозғалыс анимациясы",
+                "В) Қарапайым электрондық кестелер",
+                "Г) Файлдарды мұрағаттау бағдарламалары"
+            ],
+            correct: "Б) 3D көлемді модельдер және қозғалыс анимациясы"
+        }
+    ];
+
+    function startGame() {
+        const input = document.getElementById("studentName");
+        if(input.value.trim() === "") {
+            alert("⚠️ Бас сәулетшінің аты-жөнін енгізіңіз!");
+            return;
+        }
+        playerName = input.value.trim();
+        document.getElementById("playerDisplay").innerText = `Сәулетші: ${playerName}`;
+        document.getElementById("nameSection").style.display = "none";
+        document.getElementById("gameScreen").style.display = "block";
+        loadMission();
+    }
+
+    function loadMission() {
+        if(currentMission >= missions.length) {
+            endGame();
+            return;
+        }
+        
+        attemptsLeft = 2; // Әр сұраққа басынан 2 попытка беріледі
+        document.getElementById("levelDisplay").innerText = `Миссия: ${currentMission + 1} / 5`;
+        document.getElementById("scoreDisplay").innerText = `Энергия: ${score} балл`;
+        
+        const mis = missions[currentMission];
+        const card = document.getElementById("missionCard");
+        
+        let html = `
+            <div class="mission-title">${mis.title}</div>
+            <div class="attempts-info" id="attemptsInfo">Қалған попытка: 2 🔄</div>
+            <p>${mis.desc}</p>
+            <div class="options-list">
+        `;
+        mis.options.forEach(opt => {
+            html += `<div class="opt-option" onclick="checkAnswer(this, '${opt.replace(/'/g, "\\'")}')">${opt}</div>`;
+        });
+        html += `</div>`;
+        card.innerHTML = html;
+    }
+
+    function checkAnswer(element, selectedOption) {
+        const mis = missions[currentMission];
+        
+        if(selectedOption === mis.correct) {
+            score += 2; // Дұрыс жауапқа 2 ұпай
+            let percentage = score * 10;
+            document.getElementById("coreFill").style.width = percentage + "%";
+            document.getElementById("scoreDisplay").innerText = `Энергия: ${score} балл`;
+            
+            alert("⚡ Тамаша! Дұрыс шешім қабылданды (+2 ұпай)!");
+            currentMission++;
+            loadMission();
+        } else {
+            attemptsLeft--;
+            if(attemptsLeft > 0) {
+                element.style.background = "rgba(255, 0, 0, 0.3)";
+                element.style.pointerEvents = "none"; // Қате батырманы өшіру
+                document.getElementById("attemptsInfo").innerText = `Қалған попытка: ${attemptsLeft} 🔄`;
+                alert("❌ Қате жауап! Тағы 1 попыткаңыз қалды, мұқият ойланыңыз.");
+            } else {
+                alert(`⚠️ Попыткалар таусы-ла-ды! Дұрыс жауап: \n\n${mis.correct}`);
+                currentMission++;
+                loadMission();
+            }
+        }
+    }
+
+    function endGame() {
+        document.getElementById("gameScreen").style.display = "none";
+        document.getElementById("resultScreen").style.display = "block";
+        document.getElementById("finalText").innerHTML = `Құттықтаймыз, сәулетші <b>${playerName}</b>!<br>Галактикалық станцияға жиналған жалпы энергия: 10 ұпайдан <b>${score} балл</b>.`;
+        
+        let badge = "";
+        if(score === 10) badge = "🌟 Бас Галактикалық Сәулетші & 3D Сарапшысы!";
+        else if(score >= 6) badge = "👍 Тәжірибелі 3D Инженер!";
+        else badge = "💡 Жобаны қайта қарап шығу керек!";
+        
+        document.getElementById("badgeBox").innerText = badge;
+    }
+</script>
+
+</body>
+</html>
